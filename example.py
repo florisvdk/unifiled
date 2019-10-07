@@ -12,13 +12,6 @@ user = input()
 print("Led Controller passord:")
 password = input()
 
-# setttings are here for testing
-
-user = "ubnt"
-password = "ubnt"
-ip = "192.168.255.41"
-port = "20443"
-
 # login first
 
 session = unifiled.Login.ledlogin(user, password, ip, port)
