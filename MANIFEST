@@ -4,3 +4,4 @@ setup.py
 unifiled\Get.py
 unifiled\Login.py
 unifiled\Set.py
+unifiled\__init__.py
