@@ -3,7 +3,7 @@ setup(
   name = 'unifiled',
   packages = ['unifiled'],
   version = '0.1',
-  license='MIT',        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
+  license='MIT',
   description = 'Easily connect to Ubiquiti Unifi led devices',
   author = 'Floris Van der krieken',
   author_email = 'git@florisvdk.net',

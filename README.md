@@ -22,7 +22,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## License
 
-This project has no license at the moment - see the [LICENSE.md](LICENSE.md) file for details in the future
+This project is licenced under the MIT license - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
