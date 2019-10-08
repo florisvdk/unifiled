@@ -1,36 +1,27 @@
-import time, unifiled
+import time #, unifiled
+from unifiled import unifiled
 
 # ask for needed info
 
-print("This is the unifiled python module example/test.")
+print("This is the unifiled python module example/test script.")
 print("Led Controller ip:")
-ip = input()
+ip = str(input())
 print("Led Controller port (20443):")
-port = input()
+port = str(input())
 print("Led Controller user:")
-user = input()
-print("Led Controller passord:")
-password = input()
+user = str(input())
+print("Led Controller password:")
+password = str(input())
 
 # login first
 
-session = unifiled.Login.ledlogin(user, password, ip, port)
-
-if session == False:
-
-    print("Coudl not login, check settings or server")
-    exit()
+api = unifiled(ip, port, username=user, password=password, debug=True)
 
 print("login succesfull")
 
 # get device list
 
-devices = unifiled.Get.leddevices(session, ip, port)
-
-if devices == False:
-
-    print("Coudl not get devices, check settings or server")
-    exit()
+devices = api.getdevices()
 
 print("Got " + str(len(devices)) + " device(s) succesfully\n\n")
 
@@ -58,7 +49,7 @@ deviceid = devices[devicetoset]['id']
 
 # set brightness on device
 
-if unifiled.Set.leddevicesetbrightness(deviceid, brightness,session, ip, port) == True:
+if api.setdevicebrightness(deviceid, brightness) == True:
 
     print("Set brightness succesfully")
 
@@ -68,7 +59,7 @@ else:
 
 # set output on device
 
-if unifiled.Set.leddevicesetoutput (deviceid, output, session, ip, port) == True:
+if api.setdeviceoutput(deviceid, output) == True:
 
     print("Set output succesfully")
 
@@ -78,7 +69,7 @@ else:
 
 # get groups
 
-groups = unifiled.Get.ledgroups(session, ip, port)
+groups = api.getgroups()
 
 if groups == False:
 
