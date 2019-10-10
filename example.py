@@ -1,4 +1,4 @@
-import time #, unifiled
+import time
 from unifiled import unifiled
 
 # ask for needed info

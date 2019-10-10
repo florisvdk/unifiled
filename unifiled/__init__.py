@@ -1,6 +1,11 @@
 import requests, json, urllib3
 from datetime import datetime
 
+# TODO: Add function to convert a range off 0-255 to 0-100
+
+# Maybe TODO: Add function to select device id from name
+
+
 # fix cert warnigns
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -49,8 +54,10 @@ class unifiled:
             return True
         elif login_req.status_code == 403:
             raise ValueError('Username or password is incorrect')
+            return None
         else:
             raise ValueError('Connection error')
+            return None
 
     def getdevices(self):
         self.debug_log('Getting devices')
@@ -59,6 +66,7 @@ class unifiled:
             return getdevices_req.json()
         else:
             raise ValueError('Could not get devices')
+            return None
 
     def getgroups(self):
         self.debug_log('Getting groups')
@@ -67,6 +75,7 @@ class unifiled:
             return json.loads(getgroups_req.content)
         else:
             raise ValueError('Could not get groups')
+            return None
 
     def setdevicebrightness(self, id, brightness):
         self.debug_log('Setting brightness to {0} for device {1}'.format(brightness, id))
@@ -76,6 +85,7 @@ class unifiled:
             return True
         else:
             raise ValueError('Could not set brightness')
+            return None
 
     def setdeviceoutput(self, id, output):
         self.debug_log('Setting output to {0} for device {1}'.format(output, id))
@@ -85,8 +95,22 @@ class unifiled:
             return True
         else:
             raise ValueError('Could not set output')
+            return None
 
+    def setgroupoutput(self, id, output):
+        self.debug_log('Setting output to {0} for group {1}'.format(output, id))
+        data = '{"command":"config-output","value":' + str(output) + '}'
+        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False)
+        if setdeviceoutput_req.status_code == 200:
+            return True
+        else:
+            raise ValueError('Could not set output')
+            return None
 
-#from unifiled.Login import ledlogin
-#from unifiled.Get import leddevices, ledgroups
-#from unifiled.Set import leddevicesetbrightness, leddevicesetoutput
+    def getloginstate(self):
+        self.debug_log('Checking login states')
+        devices = getdevices()
+        if devices == True:
+            return True
+        else:
+            return False
