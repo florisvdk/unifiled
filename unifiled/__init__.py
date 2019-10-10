@@ -106,7 +106,7 @@ class unifiled:
 
     def getloginstate(self):
         self.debug_log('Checking login states')
-        devices = getdevices()
+        devices = self.getdevices()
         if devices == True:
             return True
         else:
