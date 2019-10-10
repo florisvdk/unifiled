@@ -1,10 +1,7 @@
 import requests, json, urllib3
 from datetime import datetime
 
-# TODO: Add function to convert a range off 0-255 to 0-100
-
 # Maybe TODO: Add function to select device id from name
-
 
 # fix cert warnigns
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -114,3 +111,14 @@ class unifiled:
             return True
         else:
             return False
+
+    def convertfrom255to100(self,value):
+        self.debug_log('Converting {0} from 0-255 scale to 0-100 scale'.format(value))
+        oldmin = 0
+        oldmax = 255
+        newmin = 0
+        newmax = 100
+        oldrange = (oldmax - oldmin)
+        newrange = (newmax - newmin)
+        convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
+        return int(convertedvalue)
