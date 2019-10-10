@@ -123,16 +123,16 @@ class unifiled:
         convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
         return int(convertedvalue)
 
-        def convertfrom100to255(self,value):
-            self.debug_log('Converting {0} from 0-100 scale to 0-255 scale'.format(value))
-            oldmin = 0
-            oldmax = 100
-            newmin = 0
-            newmax = 255
-            oldrange = (oldmax - oldmin)
-            newrange = (newmax - newmin)
-            convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
-            return int(convertedvalue)
+    def convertfrom100to255(self,value):
+        self.debug_log('Converting {0} from 0-100 scale to 0-255 scale'.format(value))
+        oldmin = 0
+        oldmax = 100
+        newmin = 0
+        newmax = 255
+        oldrange = (oldmax - oldmin)
+        newrange = (newmax - newmin)
+        convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
+        return int(convertedvalue)
 
     def getlights(self):
         lights = []
