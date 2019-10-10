@@ -122,3 +122,13 @@ class unifiled:
         newrange = (newmax - newmin)
         convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
         return int(convertedvalue)
+
+    def getlights(self):
+        lights = []
+        devices = self.getdevices()
+        i = 0
+        while i < len(devices):
+            if devices[i]['type'] == 'LED':
+                lights.append(devices[i])
+            i += 1
+        return lights
