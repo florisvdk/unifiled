@@ -123,6 +123,17 @@ class unifiled:
         convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
         return int(convertedvalue)
 
+        def convertfrom100to255(self,value):
+            self.debug_log('Converting {0} from 0-100 scale to 0-255 scale'.format(value))
+            oldmin = 0
+            oldmax = 100
+            newmin = 0
+            newmax = 255
+            oldrange = (oldmax - oldmin)
+            newrange = (newmax - newmin)
+            convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
+            return int(convertedvalue)
+
     def getlights(self):
         lights = []
         devices = self.getdevices()
@@ -132,3 +143,24 @@ class unifiled:
                 lights.append(devices[i])
             i += 1
         return lights
+
+    def getlightstate(self, id):
+        devices = self.getdevices()
+        i = 0
+        while i < len(devices):
+            if devices[i]['id'] == str(id):
+                if devices[i]['status']['output'] == 1:
+                    return True
+                else:
+                    return False
+        i += 1
+        return False
+
+    def getlightbrightness(self, id):
+        devices = self.getdevices()
+        i = 0
+        while i < len(devices):
+            if devices[i]['id'] == str(id):
+                return int(devices[i]['status']['led'])
+        i += 1
+        return False
