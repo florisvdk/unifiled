@@ -1,6 +1,7 @@
 import requests, json, urllib3
 from datetime import datetime
 
+# TODO: Add timeout=5 to all requests
 # Maybe TODO: Add function to select device id from name
 
 # fix cert warnigns
@@ -25,12 +26,12 @@ class unifiled:
             print('{}: {}'.format(datetime.now(), text))
 
     def post(self, endpoint, data):
-        req = requests.post('https://' + self._ip + ':' + self._port + '/' + endpoint, json=data, verify=False)
+        req = requests.post('https://' + self._ip + ':' + self._port + '/' + endpoint, json=data, verify=False, timeout=5)
         self.debug_log('POST: {0}\n Data: {1}\n Response: {2}'.format(req.url, data, req.json()))
         return req
 
     def get(self, endpoint, data):
-        req = requests.get('https://' + self._ip + ':' + self._port + '/' + endpoint, params=data, verify=False)
+        req = requests.get('https://' + self._ip + ':' + self._port + '/' + endpoint, params=data, verify=False, timeout=5)
         self.debug_log('GET: {0}\n Data: {1}\n Response: {2}'.format(req.url, data, req.json()))
         return req
 
@@ -40,7 +41,7 @@ class unifiled:
             'username': username,
             'password': password
         }
-        login_req = requests.post('https://' + self._ip + ':' + self._port + '/v1/login', data=_json, verify=False)
+        login_req = requests.post('https://' + self._ip + ':' + self._port + '/v1/login', data=_json, verify=False, timeout=5)
         if login_req.status_code == 200:
             self._authorization = login_req.json()['access_token']
             self._headers = {
@@ -58,7 +59,7 @@ class unifiled:
 
     def getdevices(self):
         self.debug_log('Getting devices')
-        getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False)
+        getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
         if getdevices_req.status_code == 200:
             return getdevices_req.json()
         else:
@@ -67,7 +68,7 @@ class unifiled:
 
     def getgroups(self):
         self.debug_log('Getting groups')
-        getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False)
+        getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
         if getgroups_req.status_code == 200:
             return json.loads(getgroups_req.content)
         else:
@@ -77,7 +78,7 @@ class unifiled:
     def setdevicebrightness(self, id, brightness):
         self.debug_log('Setting brightness to {0} for device {1}'.format(brightness, id))
         data = '{"command":"sync","value":' + str(brightness) + '}'
-        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False)
+        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
             return True
         else:
@@ -87,7 +88,7 @@ class unifiled:
     def setdeviceoutput(self, id, output):
         self.debug_log('Setting output to {0} for device {1}'.format(output, id))
         data = '{"command":"config-output","value":' + str(output) + '}'
-        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False)
+        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
             return True
         else:
@@ -97,7 +98,7 @@ class unifiled:
     def setgroupoutput(self, id, output):
         self.debug_log('Setting output to {0} for group {1}'.format(output, id))
         data = '{"command":"config-output","value":' + str(output) + '}'
-        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False)
+        setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
             return True
         else:
