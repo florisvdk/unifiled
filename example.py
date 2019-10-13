@@ -31,9 +31,9 @@ print('  Devices:')
 
 i = 0
 
-while i < len(devices):
-    print(str(i) + '   Model: ' + devices[i]['info']['model'] + 'Name: ' + devices[i]['name'] + ' Type: ' + devices[i]['type'])
-    print('      Status[ Brightness: ' + str(devices[i]['status']['led']) + ' State: ' + str(devices[i]['status']['output']) + ' Online: ' + str(devices[i]['isOnline']) + ' ]')
+for device in devices:
+    print(str(i) + '   Model: ' + device['info']['model'] + 'Name: ' + device['name'] + ' Type: ' + device['type'])
+    print('      Status[ Brightness: ' + str(device['status']['led']) + ' State: ' + str(device['status']['output']) + ' Online: ' + str(device['isOnline']) + ' ]')
     i += 1
 
 # ask for input

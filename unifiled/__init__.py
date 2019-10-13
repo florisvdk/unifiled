@@ -1,8 +1,7 @@
 import requests, json, urllib3
 from datetime import datetime
 
-# TODO: Add timeout=5 to all requests
-# Maybe TODO: Add function to select device id from name
+# TODO: Add more error handling
 
 # fix cert warnigns
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -25,16 +24,6 @@ class unifiled:
         if self._debug:
             print('{}: {}'.format(datetime.now(), text))
 
-    def post(self, endpoint, data):
-        req = requests.post('https://' + self._ip + ':' + self._port + '/' + endpoint, json=data, verify=False, timeout=5)
-        self.debug_log('POST: {0}\n Data: {1}\n Response: {2}'.format(req.url, data, req.json()))
-        return req
-
-    def get(self, endpoint, data):
-        req = requests.get('https://' + self._ip + ':' + self._port + '/' + endpoint, params=data, verify=False, timeout=5)
-        self.debug_log('GET: {0}\n Data: {1}\n Response: {2}'.format(req.url, data, req.json()))
-        return req
-
     def login(self, username, password):
         self.debug_log('Logging in: {0}'.format(username))
         _json = {
@@ -52,10 +41,8 @@ class unifiled:
             return True
         elif login_req.status_code == 403:
             raise ValueError('Username or password is incorrect')
-            return None
         else:
             raise ValueError('Connection error')
-            return None
 
     def getdevices(self):
         self.debug_log('Getting devices')
@@ -64,7 +51,6 @@ class unifiled:
             return getdevices_req.json()
         else:
             raise ValueError('Could not get devices')
-            return None
 
     def getgroups(self):
         self.debug_log('Getting groups')
@@ -73,7 +59,6 @@ class unifiled:
             return json.loads(getgroups_req.content)
         else:
             raise ValueError('Could not get groups')
-            return None
 
     def setdevicebrightness(self, id, brightness):
         self.debug_log('Setting brightness to {0} for device {1}'.format(brightness, id))
@@ -83,7 +68,6 @@ class unifiled:
             return True
         else:
             raise ValueError('Could not set brightness')
-            return None
 
     def setdeviceoutput(self, id, output):
         self.debug_log('Setting output to {0} for device {1}'.format(output, id))
@@ -93,7 +77,6 @@ class unifiled:
             return True
         else:
             raise ValueError('Could not set output')
-            return None
 
     def setgroupoutput(self, id, output):
         self.debug_log('Setting output to {0} for group {1}'.format(output, id))
@@ -103,7 +86,6 @@ class unifiled:
             return True
         else:
             raise ValueError('Could not set output')
-            return None
 
     def getloginstate(self):
         self.debug_log('Checking login states')
@@ -138,30 +120,34 @@ class unifiled:
     def getlights(self):
         lights = []
         devices = self.getdevices()
-        i = 0
-        while i < len(devices):
-            if devices[i]['type'] == 'LED':
-                lights.append(devices[i])
-            i += 1
+        for device in devices:
+            if device['type'] == 'LED':
+                lights.append(device)
         return lights
 
     def getlightstate(self, id):
         devices = self.getdevices()
-        i = 0
-        while i < len(devices):
-            if devices[i]['id'] == str(id):
-                if devices[i]['status']['output'] == 1:
+        for device in devices:
+            if device['id'] == str(id):
+                if device['status']['output'] == 1:
                     return True
                 else:
                     return False
-        i += 1
         return False
 
     def getlightbrightness(self, id):
         devices = self.getdevices()
-        i = 0
-        while i < len(devices):
-            if devices[i]['id'] == str(id):
-                return int(devices[i]['status']['led'])
-        i += 1
+        for device in devices:
+            if device['id'] == str(id):
+                return int(device['status']['led'])
+        return False
+
+    def getlightavailable(self, id):
+        devices = self.getdevices()
+        for device in devices:
+            if device['id'] == str(id):
+                if device['isOnline'] == True:
+                    return True
+                else:
+                    return False
         return False
