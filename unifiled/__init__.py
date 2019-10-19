@@ -131,6 +131,14 @@ class unifiled:
                 lights.append(device)
         return lights
 
+    def getsensor(self):
+        lights = []
+        devices = self.getdevices()
+        for device in devices:
+            if device['type'] != 'LED':
+                lights.append(device)
+        return lights
+
     def getlightstate(self, id):
         devices = self.getdevices()
         for device in devices:
