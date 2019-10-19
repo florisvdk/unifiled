@@ -30,7 +30,13 @@ class unifiled:
             'username': username,
             'password': password
         }
-        login_req = requests.post('https://' + self._ip + ':' + self._port + '/v1/login', data=_json, verify=False, timeout=5)
+
+        try:
+            login_req = requests.post('https://' + self._ip + ':' + self._port + '/v1/login', data=_json, verify=False, timeout=5)
+            return something
+        except requests.exceptions.Timeout:
+            raise Timeout('Connection timed out')
+
         if login_req.status_code == 200:
             self._authorization = login_req.json()['access_token']
             self._headers = {
@@ -40,9 +46,9 @@ class unifiled:
             }
             return True
         elif login_req.status_code == 403:
-            raise ValueError('Username or password is incorrect')
+            raise InvalidCredentials('Username or password is incorrect')
         else:
-            raise ValueError('Connection error')
+            raise ConnectionError('Connection error')
 
     def getdevices(self):
         self.debug_log('Getting devices')
