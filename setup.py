@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'unifiled',
   packages = ['unifiled'],
-  version = '0.12',
+  version = '0.13',
   license='MIT',
   description = 'Easily connect to Ubiquiti Unifi led devices',
   author = 'Floris Van der krieken',
