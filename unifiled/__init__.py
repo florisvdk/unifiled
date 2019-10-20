@@ -33,7 +33,6 @@ class unifiled:
 
         try:
             login_req = requests.post('https://' + self._ip + ':' + self._port + '/v1/login', data=_json, verify=False, timeout=5)
-            return something
         except requests.exceptions.Timeout:
             raise Timeout('Connection timed out')
 
