@@ -4,8 +4,6 @@ from datetime import datetime
 import requests
 import urllib3
 
-# TODO: Add more error handling
-
 # fix cert warnigns
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -52,7 +50,7 @@ class unifiled:
         else:
             raise ConnectionError('Connection error')
 
-    def getdevices(self):
+    def get_devices(self):
         self.debug_log('Getting devices')
         getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
         if getdevices_req.status_code == 200:
@@ -60,7 +58,7 @@ class unifiled:
         else:
             raise ValueError('Could not get devices')
 
-    def getgroups(self):
+    def get_groups(self):
         self.debug_log('Getting groups')
         getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
         if getgroups_req.status_code == 200:
@@ -68,7 +66,7 @@ class unifiled:
         else:
             raise ValueError('Could not get groups')
 
-    def setdevicebrightness(self, id, brightness):
+    def set_device_brightness(self, id, brightness):
         self.debug_log('Setting brightness to {0} for device {1}'.format(brightness, id))
         data = '{"command":"sync","value":' + str(brightness) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
@@ -77,7 +75,7 @@ class unifiled:
         else:
             raise ValueError('Could not set brightness')
 
-    def setdeviceoutput(self, id, output):
+    def set_device_output(self, id, output):
         self.debug_log('Setting output to {0} for device {1}'.format(output, id))
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
@@ -86,7 +84,7 @@ class unifiled:
         else:
             raise ValueError('Could not set output')
 
-    def setgroupoutput(self, id, output):
+    def set_group_output(self, id, output):
         self.debug_log('Setting output to {0} for group {1}'.format(output, id))
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
@@ -95,15 +93,15 @@ class unifiled:
         else:
             raise ValueError('Could not set output')
 
-    def getloginstate(self):
+    def get_login_state(self):
         self.debug_log('Checking login states')
-        devices = self.getdevices()
+        devices = self.get_devices()
         if devices != None:
             return True
         else:
             return False
 
-    def convertfrom255to100(self,value):
+    def convert_from_255_to_100(self,value):
         self.debug_log('Converting {0} from 0-255 scale to 0-100 scale'.format(value))
         oldmin = 0
         oldmax = 255
@@ -114,7 +112,7 @@ class unifiled:
         convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
         return int(convertedvalue)
 
-    def convertfrom100to255(self,value):
+    def convert_from_100_to_255(self,value):
         self.debug_log('Converting {0} from 0-100 scale to 0-255 scale'.format(value))
         oldmin = 0
         oldmax = 100
@@ -125,24 +123,24 @@ class unifiled:
         convertedvalue = (((int(value) - oldmin) * newrange) / oldrange) + newmin
         return int(convertedvalue)
 
-    def getlights(self):
+    def get_lights(self):
         lights = []
-        devices = self.getdevices()
+        devices = self.get_devices()
         for device in devices:
             if device['type'] == 'LED':
                 lights.append(device)
         return lights
 
-    def getsensor(self):
-        lights = []
-        devices = self.getdevices()
+    def get_sensors(self):
+        sensors = []
+        devices = self.get_devices()
         for device in devices:
             if device['type'] != 'LED':
-                lights.append(device)
-        return lights
+                sensors.append(device)
+        return sensors
 
-    def getlightstate(self, id):
-        devices = self.getdevices()
+    def get_light_state(self, id):
+        devices = self.get_devices()
         for device in devices:
             if device['id'] == str(id):
                 if device['status']['output'] == 1:
@@ -151,15 +149,15 @@ class unifiled:
                     return False
         return False
 
-    def getlightbrightness(self, id):
-        devices = self.getdevices()
+    def get_light_brightness(self, id):
+        devices = self.get_devices()
         for device in devices:
             if device['id'] == str(id):
                 return int(device['status']['led'])
         return False
 
-    def getlightavailable(self, id):
-        devices = self.getdevices()
+    def get_light_available(self, id):
+        devices = self.get_devices()
         for device in devices:
             if device['id'] == str(id):
                 if device['isOnline'] == True:
@@ -167,3 +165,44 @@ class unifiled:
                 else:
                     return False
         return False
+
+    #temporary compatibility functions.
+
+    def getdevices(self):
+        return self.get_devices()
+
+    def getgroups(self):
+        return self.get_groups()
+
+    def setdevicebrightness(self, id, brightness):
+        return self.set_device_brightness(id, brightness)
+
+    def setdeviceoutput(self, id, output):
+        return self.set_device_output(id, output)
+
+    def setgroupoutput(self, id, output):
+        return self.set_group_output(id, output)
+
+    def getloginstate(self):
+        return self.get_login_state()
+
+    def convertfrom255to100(self,value):
+        return self.convert_from_255_to_100(value)
+
+    def convertfrom100to255(self,value):
+        return self.convert_from_100_to_255(value)
+
+    def getlights(self):
+        return self.get_lights()
+
+    def getsensor(self):
+        return self.get_sensors()
+
+    def getlightstate(self, id):
+        return self.get_light_state(id)
+
+    def getlightbrightness(self, id):
+        return self.get_light_brightness(id)
+
+    def getlightavailable(self, id):
+        return self.get_light_available(id)
