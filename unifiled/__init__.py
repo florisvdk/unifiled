@@ -1,5 +1,8 @@
-import requests, json, urllib3
+import json
 from datetime import datetime
+
+import requests
+import urllib3
 
 # TODO: Add more error handling
 
