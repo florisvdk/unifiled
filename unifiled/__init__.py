@@ -37,7 +37,6 @@ class unifiled:
         except:
             return False
 
-
         if login_req.status_code == 200:
             self._authorization = login_req.json()['access_token']
             self._headers = {
@@ -51,7 +50,10 @@ class unifiled:
 
     def get_devices(self):
         self.debug_log('Getting devices')
-        getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
+        try:
+            getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
+        except:
+            return None
         if getdevices_req.status_code == 200:
             return getdevices_req.json()
         else:
@@ -59,7 +61,10 @@ class unifiled:
 
     def get_groups(self):
         self.debug_log('Getting groups')
-        getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
+        try:
+            getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
+        except:
+            return None
         if getgroups_req.status_code == 200:
             return json.loads(getgroups_req.content)
         else:
