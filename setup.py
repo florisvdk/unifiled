@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'unifiled',
   packages = ['unifiled'],
-  version = '0.16',
+  version = '0.17',
   license='MIT',
   description = 'Easily connect to Ubiquiti Unifi led devices',
   author = 'Floris Van der krieken',
   author_email = 'git@florisvdk.net',
   url = 'https://github.com/florisvdk/unifiled',
-  download_url = 'https://github.com/florisvdk/unifiled/archive/v_01.tar.gz',
+  download_url = 'https://github.com/florisvdk/unifiled/archive/v_017.tar.gz',
   keywords = ['UNIFI', 'LED', 'CONTROLLER', 'UBIQUITI'],
   install_requires=[
           'requests',
@@ -19,9 +19,8 @@ setup(
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
   ],
 )

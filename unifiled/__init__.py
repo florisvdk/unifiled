@@ -23,10 +23,10 @@ class unifiled:
 
     def debug_log(self, text):
         if self._debug:
-            print('{}: {}'.format(datetime.now(), text))
+            print(f"{datetime.now()}: {text}")
 
     def login(self, username, password):
-        self.debug_log('Logging in: {0}'.format(username))
+        self.debug_log(f"Logging in: {username}")
         _json = {
             'username': username,
             'password': password
@@ -71,7 +71,7 @@ class unifiled:
             raise ValueError('Could not get groups')
 
     def set_device_brightness(self, id, brightness):
-        self.debug_log('Setting brightness to {0} for device {1}'.format(brightness, id))
+        self.debug_log(f"Setting brightness to {brightness} for device {id}")
         data = '{"command":"sync","value":' + str(brightness) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
@@ -80,7 +80,7 @@ class unifiled:
             raise ValueError('Could not set brightness')
 
     def set_device_output(self, id, output):
-        self.debug_log('Setting output to {0} for device {1}'.format(output, id))
+        self.debug_log(f"Setting output to {output} for device {id}")
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
@@ -89,7 +89,7 @@ class unifiled:
             raise ValueError('Could not set output')
 
     def set_group_output(self, id, output):
-        self.debug_log('Setting output to {0} for group {1}'.format(output, id))
+        self.debug_log(f"Setting output to {output} for group {id}")
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
         if setdeviceoutput_req.status_code == 200:
@@ -106,7 +106,7 @@ class unifiled:
             return False
 
     def convert_from_255_to_100(self,value):
-        self.debug_log('Converting {0} from 0-255 scale to 0-100 scale'.format(value))
+        self.debug_log(f"Converting {value} from 0-255 scale to 0-100 scale")
         oldmin = 0
         oldmax = 255
         newmin = 0
@@ -117,7 +117,7 @@ class unifiled:
         return int(convertedvalue)
 
     def convert_from_100_to_255(self,value):
-        self.debug_log('Converting {0} from 0-100 scale to 0-255 scale'.format(value))
+        self.debug_log(f"Converting {value} from 0-100 scale to 0-255 scale")
         oldmin = 0
         oldmax = 100
         newmin = 0
