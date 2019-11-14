@@ -23,7 +23,3 @@ See also the list of [contributors](https://github.com/your/project/contributors
 ## License
 
 This project is licenced under the MIT license - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* ToDo
