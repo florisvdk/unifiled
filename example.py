@@ -23,7 +23,7 @@ print("login succesfull")
 
 devices = api.getdevices()
 
-print("Got " + str(len(devices)) + " device(s) succesfully\n\n")
+print(f"Got {len(devices)} device(s) succesfully\n\n")
 
 # loop trugh devices
 
@@ -32,8 +32,8 @@ print('  Devices:')
 i = 0
 
 for device in devices:
-    print(str(i) + '   Model: ' + device['info']['model'] + 'Name: ' + device['name'] + ' Type: ' + device['type'])
-    print('      Status[ Brightness: ' + str(device['status']['led']) + ' State: ' + str(device['status']['output']) + ' Online: ' + str(device['isOnline']) + ' ]')
+    print(f"{i}   Model: {device['info']['model']} Name: {device['name']} Type: {device['type']}")
+    print(f"      Status[ Brightness: {device['status']['led']} State: {device['status']['output']} Online: {device['isOnline']} ]")
     i += 1
 
 # ask for input
@@ -84,8 +84,8 @@ i = 0
 
 while i < len(groups):
 
-    print(str(i) + "   Group name: " + groups[i]['name'])
-    print("      Status[ Brightness: " + str(groups[i]['led']) + " State: " + str(groups[i]['output']) + " Devices turned on: " + str(groups[i]['devicesTurnedOn']) + " ]")
+    print(f"{i}   Group name: {groups[i]['name']}")
+    print(f"      Status[ Brightness: {groups[i]['led']} State: {groups[i]['output']} Devices turned on: {groups[i]['devicesTurnedOn']} ]")
 
     print("      Devices:")
 
@@ -95,7 +95,7 @@ while i < len(groups):
 
     while j < len(groups[i]['devices']):
 
-        print('        ' + groups[i]['devices'][j]['name'])
+        print(f"        {groups[i]['devices'][j]['name']}")
 
         #devices in group
 
