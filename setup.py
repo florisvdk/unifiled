@@ -8,7 +8,7 @@ setup(
   author = 'Floris Van der krieken',
   author_email = 'git@florisvdk.net',
   url = 'https://github.com/florisvdk/unifiled',
-  download_url = 'https://github.com/florisvdk/unifiled/archive/v1.0.zip',
+  download_url = 'https://github.com/florisvdk/unifiled/archive/v1.1.zip',
   keywords = ['UNIFI', 'LED', 'CONTROLLER', 'UBIQUITI'],
   install_requires=[
           'requests',
