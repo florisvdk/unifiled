@@ -1,4 +1,5 @@
 import json
+import time
 from datetime import datetime
 
 import requests
@@ -13,11 +14,19 @@ class unifiled:
     _debug = False
     _authorization = None
     _headers = None
+    _cache = None
+    _cache_max_age = None
+    _cache_devices_last_change = 0
+    _cache_devices_data = None
+    _cache_groups_last_change = 0
+    _cache_groups_data = None
 
-    def __init__(self, _ip, _port, username, password, debug=False, autologin=True):
+    def __init__(self, _ip, _port, username, password, debug=False, autologin=True, cache=True, cache_max_age=15):
         self._ip = _ip
         self._port = _port
         self._debug = debug
+        self._cache = cache
+        self._cache_max_age = cache_max_age
         if autologin:
             self.login(username, password)
 
@@ -50,30 +59,67 @@ class unifiled:
 
     def get_devices(self):
         self.debug_log('Getting devices')
-        try:
-            getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
-        except:
-            return None
-        if getdevices_req.status_code == 200:
-            return getdevices_req.json()
+        if (self._cache == True):
+            self.debug_log('Getting devices using caching')
+            if(self._cache_devices_last_change < (time.time() - self._cache_max_age)):
+                self.debug_log('Getting devices cache is expired')
+                try:
+                    getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
+                except:
+                    return None
+                if getdevices_req.status_code == 200:
+                    self._cache_devices_last_change = time.time()
+                    self._cache_devices_data = getdevices_req.json()
+                    return self._cache_devices_data
+                else:
+                    raise ValueError('Could not get devices')
+            else:
+                self.debug_log('Getting devices cache is valid')
+                return self._cache_devices_data
         else:
-            raise ValueError('Could not get devices')
+            try:
+                getdevices_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/devices', headers=self._headers, verify=False, timeout=5)
+            except:
+                return None
+            if getdevices_req.status_code == 200:
+                return getdevices_req.json()
+            else:
+                raise ValueError('Could not get devices')
 
     def get_groups(self):
         self.debug_log('Getting groups')
-        try:
-            getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
-        except:
-            return None
-        if getgroups_req.status_code == 200:
-            return json.loads(getgroups_req.content)
+        if(self._cache == True):
+            self.debug_log('Getting groups using caching')
+            if(self._cache_groups_last_change < (time.time() - self._cache_max_age)):
+                self.debug_log('Getting groups cache is expired')
+                try:
+                    getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
+                except:
+                    return None
+                if getgroups_req.status_code == 200:
+                    self._cache_groups_last_change = time.time()
+                    self._cache_groups_data = getgroups_req.json()
+                    return self._cache_groups_data
+                else:
+                    raise ValueError('Could not get groups')
+            else:
+                self.debug_log('Getting groups cache is valid')
+                return self._cache_groups_data
         else:
-            raise ValueError('Could not get groups')
+            try:
+                getgroups_req = requests.get('https://' + self._ip + ':' + self._port + '/v1/groups', headers=self._headers, verify=False, timeout=5)
+            except:
+                return None
+            if getgroups_req.status_code == 200:
+                return json.loads(getgroups_req.content)
+            else:
+                raise ValueError('Could not get groups')
 
     def set_device_brightness(self, id, brightness):
         self.debug_log(f"Setting brightness to {brightness} for device {id}")
         data = '{"command":"sync","value":' + str(brightness) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
+        self._cache_devices_last_change = 0
         if setdeviceoutput_req.status_code == 200:
             return True
         else:
@@ -83,6 +129,7 @@ class unifiled:
         self.debug_log(f"Setting output to {output} for device {id}")
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/devices/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
+        self._cache_devices_last_change = 0
         if setdeviceoutput_req.status_code == 200:
             return True
         else:
@@ -92,6 +139,8 @@ class unifiled:
         self.debug_log(f"Setting output to {output} for group {id}")
         data = '{"command":"config-output","value":' + str(output) + '}'
         setdeviceoutput_req = requests.put('https://' + self._ip + ':' + self._port + '/v1/group/' + str(id), data=data, headers=self._headers, verify=False, timeout=5)
+        self._cache_devices_last_change = 0
+        self._cache_groups_last_change = 0
         if setdeviceoutput_req.status_code == 200:
             return True
         else:

@@ -21,7 +21,8 @@ print("login succesfull")
 
 # get device list
 
-devices = api.getdevices()
+devices = api.get_devices()
+devices = api.get_devices()
 
 print(f"Got {len(devices)} device(s) succesfully\n\n")
 
@@ -49,7 +50,7 @@ deviceid = devices[devicetoset]['id']
 
 # set brightness on device
 
-if api.setdevicebrightness(deviceid, brightness) == True:
+if api.set_device_brightness(deviceid, brightness) == True:
 
     print("Set brightness succesfully")
 
@@ -59,7 +60,7 @@ else:
 
 # set output on device
 
-if api.setdeviceoutput(deviceid, output) == True:
+if api.set_device_output(deviceid, output) == True:
 
     print("Set output succesfully")
 
@@ -69,7 +70,7 @@ else:
 
 # get groups
 
-groups = api.getgroups()
+groups = api.get_groups()
 
 if groups == False:
 

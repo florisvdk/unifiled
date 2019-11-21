@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
   name = 'unifiled',
   packages = ['unifiled'],
-  version = '1.0',
+  version = '1.1',
   license='MIT',
   description = 'Easily connect to Ubiquiti Unifi led devices',
   author = 'Floris Van der krieken',
   author_email = 'git@florisvdk.net',
   url = 'https://github.com/florisvdk/unifiled',
-  download_url = 'https://github.com/florisvdk/unifiled/archive/v1.0.zip',
+  download_url = 'https://github.com/florisvdk/unifiled/archive/v1.1.zip',
   keywords = ['UNIFI', 'LED', 'CONTROLLER', 'UBIQUITI'],
   install_requires=[
           'requests',
